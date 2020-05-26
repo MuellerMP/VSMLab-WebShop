@@ -4,51 +4,76 @@ services:
     build: users.core.service/
     ports: 
       - 8001:8001
+    depends_on:
+      - eureka-server
   products-core-service:
     build: products.core.service/
     ports: 
-      - 8002:8002  
+      - 8002:8002 
+    depends_on:
+      - eureka-server 
   categories-core-service:
     build: categories.core.service/
     ports: 
       - 8003:8003
+    depends_on:
+      - eureka-server
   products-comp-service:
     build: products.comp.service/
     ports: 
       - 8004:8004
-    depends-on:
+    depends_on:
+      - eureka-server
       - categories-core-service
       - products-core-service
   users-api-service:
     build: users.api.service/
     ports: 
       - 8101:8101
-    depends-on:
+    depends_on:
+      - eureka-server
       - products-comp-service
   products-api-service:
     build: products.api.service/
     ports: 
       - 8102:8102
-    depends-on:
+    depends_on:
+      - eureka-server
       - products-comp-service
   categories-api-service:
     build: categories.api.service/
     ports: 
       - 8103:8103
-    depends-on:
+    depends_on:
+      - eureka-server
       - products-comp-service
   search-api-service:
     build: search.api.service/
     ports: 
       - 8104:8104
-    depends-on:
+    depends_on:
+      - eureka-server
       - products-comp-service
   eureka-server:
     build: eureka-server/
     ports: 
       - 8761:8761
-    depends-on:
-      - users-api-service
-      - categories-api-service
-      - products-api-service
+  zuul-server:
+    build: zuul-server/
+    ports: 
+      - 8081:8081
+     depends_on:
+      - eureka-server
       - search-api-service
+      - products-api-service
+      - categories-api-service
+      - users-api-service
+      - products-comp-service
+      
+  hystrix-dash:
+    build: hystrix-dash/
+    ports: 
+      - 8088:8088
+     depends_on:
+      - eureka-server
+      - products-comp-service
