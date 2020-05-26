@@ -2,7 +2,7 @@ server:
   port: 8001
 spring:
   application:
-  name: users-core-service
+    name: users-core-service
 eureka:
   client:
     serviceUrl:

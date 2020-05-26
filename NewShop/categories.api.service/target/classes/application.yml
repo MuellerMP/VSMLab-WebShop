@@ -2,7 +2,7 @@ server:
   port: 8103
 spring:
   application:
-  name: categories-api-service
+    name: categories-api-service
 eureka:
   client:
     serviceUrl:

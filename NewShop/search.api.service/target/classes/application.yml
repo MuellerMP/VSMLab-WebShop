@@ -2,7 +2,7 @@ server:
   port: 8104
 spring:
   application:
-  name: search-api-service
+    name: search-api-service
 eureka:
   client:
     serviceUrl:
