@@ -9,8 +9,15 @@ eureka:
 zuul:
   ignoredServices: '*'
   routes:
-    product-comp-service: /product-comp-service/**
-    product-api-service: /product-api-service/**
-    user-api-service: /user-api-service/**
-    search-api-service: /search-api-service/**
-    categories-api-service: /search-api-service/**
+    products-comp-service:
+      path: /products-comp-service/**
+      url: http://host.docker.internal:8004/products
+    products-service:
+      path: /products-service/**
+      url: http://host.docker.internal:8002/products
+    users-service:
+      path: /users-service/**
+      url: http://host.docker.internal:8001/users
+    categories-service:
+      path: /categories-service/**
+      url: http://host.docker.internal:8003/categories

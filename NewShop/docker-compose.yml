@@ -70,10 +70,19 @@ services:
      # - users-api-service
       - products-comp-service
       
+  turbine:
+    build: turbine/
+    ports: 
+      - 8082:8082
+    depends_on:
+      - eureka-server
+      - products-comp-service
+      
   hystrix-dash:
     build: hystrix-dash/
     ports: 
       - 8088:8088
     depends_on:
+      - turbine
       - eureka-server
       - products-comp-service

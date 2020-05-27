@@ -23,6 +23,7 @@
   	<module>eureka-server</module>
   	<module>zuul-server</module>
   	<module>hystrix-dash</module>
+  	<module>turbine</module>
   </modules>
   
   <dependencies>

@@ -27,8 +27,8 @@ import de.hska.products.comp.service.model.Product;
 
 @RestController
 public class ProductsCompController {
-	private static String PRODUCTS_URI = "http://localhost:8002/products";
-	private static String CATEGORIES_URI = "http://localhost:8003/categories/{id}";
+	private static String PRODUCTS_URI = "http://host.docker.internal:8002/products";
+	private static String CATEGORIES_URI = "http://host.docker.internal:8003/categories/{id}";
 	
 	private final Map<Long, Double> productPriceCache = new LinkedHashMap<Long, Double>();
 	private final Map<Long, String> productDescCache = new LinkedHashMap<Long, String>();
