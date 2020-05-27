@@ -11,13 +11,13 @@ zuul:
   routes:
     products-comp-service:
       path: /products-comp-service/**
-      url: http://host.docker.internal:8004/products
+      url: http://localhost:8004/products
     products-service:
       path: /products-service/**
-      url: http://host.docker.internal:8002/products
+      url: http://localhost:8002/products
     users-service:
       path: /users-service/**
-      url: http://host.docker.internal:8001/users
+      url: http://localhost:8001/users
     categories-service:
       path: /categories-service/**
-      url: http://host.docker.internal:8003/categories
+      url: http://localhost:8003/categories

@@ -16,13 +16,8 @@
   	<module>products.core.service</module>
   	<module>categories.core.service</module>
   	<module>products.comp.service</module>
-  	<module>users.api.service</module>
-  	<module>products.api.service</module>
-  	<module>categories.api.service</module>
-  	<module>search.api.service</module>
   	<module>eureka-server</module>
   	<module>zuul-server</module>
-  	<module>hystrix-dash</module>
   	<module>turbine</module>
   </modules>
   

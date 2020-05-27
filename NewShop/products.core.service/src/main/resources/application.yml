@@ -2,11 +2,11 @@ server:
   port: 8002
 spring:
   application:
-    name: products-comp-service
+    name: products-core-service
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://host.docker.internal:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
   instance:
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 5

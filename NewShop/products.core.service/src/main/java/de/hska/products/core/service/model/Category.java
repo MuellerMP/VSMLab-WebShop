@@ -1,8 +1,5 @@
 package de.hska.products.core.service.model;
 
-
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 
 /**
@@ -18,7 +15,7 @@ public class Category implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
-	private Set<Product> products = new HashSet<Product>(0);
+	private String productIds;
 
 	public Category() {
 	}
@@ -27,9 +24,9 @@ public class Category implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Category(String name, Set<Product> products) {
+	public Category(String name, String productIds) {
 		this.name = name;
-		this.products = products;
+		this.productIds = productIds;
 	}
 
 	@Id
@@ -52,13 +49,13 @@ public class Category implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-	public Set<Product> getProducts() {
-		return this.products;
+	@Column(name = "productIds", nullable = true)
+	public String getProductIds() {
+		return productIds;
 	}
 
-	public void setProducts(Set<Product> products) {
-		this.products = products;
+	public void setProductIds(String productIds) {
+		this.productIds = productIds;
 	}
 
 }

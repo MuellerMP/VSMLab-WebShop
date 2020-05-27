@@ -8,7 +8,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://host.docker.internal:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
     healthcheck:
       enabled: true
     lease:
@@ -16,5 +16,5 @@ eureka:
 
 turbine:
   clusterNameExpression: new String("default")
-  appConfig: HYSTRIX-EXAMPLE-SERVICE,HYSTRIX-EXAMPLE-SERVICE2,CUSTOMER-CLIENT-SERVICE
+  appConfig: PRODUCTS-COMP-SERVICE
   combineHostPort: true
