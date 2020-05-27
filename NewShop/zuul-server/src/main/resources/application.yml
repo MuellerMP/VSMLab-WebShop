@@ -9,4 +9,8 @@ eureka:
 zuul:
   ignoredServices: '*'
   routes:
-    user-proxy: /user-api/**
+    product-comp-service: /product-comp-service/**
+    product-api-service: /product-api-service/**
+    user-api-service: /user-api-service/**
+    search-api-service: /search-api-service/**
+    categories-api-service: /search-api-service/**

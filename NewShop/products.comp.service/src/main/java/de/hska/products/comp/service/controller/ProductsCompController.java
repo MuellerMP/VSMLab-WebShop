@@ -35,8 +35,7 @@ public class ProductsCompController {
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
 	
 	// Thread save
-	@Autowired
-	private RestTemplate restTemplate;
+	private static final RestTemplate restTemplate = new RestTemplate();
 	
 	@HystrixCommand(fallbackMethod = "getProductsCache", 
 			commandProperties = { @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })

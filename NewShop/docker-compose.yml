@@ -26,34 +26,34 @@ services:
       - eureka-server
       - categories-core-service
       - products-core-service
-  users-api-service:
-    build: users.api.service/
-    ports: 
-      - 8101:8101
-    depends_on:
-      - eureka-server
-      - products-comp-service
-  products-api-service:
-    build: products.api.service/
-    ports: 
-      - 8102:8102
-    depends_on:
-      - eureka-server
-      - products-comp-service
-  categories-api-service:
-    build: categories.api.service/
-    ports: 
-      - 8103:8103
-    depends_on:
-      - eureka-server
-      - products-comp-service
-  search-api-service:
-    build: search.api.service/
-    ports: 
-      - 8104:8104
-    depends_on:
-      - eureka-server
-      - products-comp-service
+  #users-api-service:
+   # build: users.api.service/
+   # ports: 
+   #   - 8101:8101
+   # depends_on:
+   #   - eureka-server
+   #   - products-comp-service
+  #products-api-service:
+  #  build: products.api.service/
+  #  ports: 
+  #    - 8102:8102
+  #  depends_on:
+  #    - eureka-server
+  #    - products-comp-service
+  #categories-api-service:
+  #  build: categories.api.service/
+   # ports: 
+   #   - 8103:8103
+   # depends_on:
+    #  - eureka-server
+    #  - products-comp-service
+  #search-api-service:
+  #  build: search.api.service/
+  #  ports: 
+  #    - 8104:8104
+   # depends_on:
+   #   - eureka-server
+   #   - products-comp-service
   eureka-server:
     build: eureka-server/
     ports: 
@@ -62,18 +62,18 @@ services:
     build: zuul-server/
     ports: 
       - 8081:8081
-     depends_on:
+    depends_on:
       - eureka-server
-      - search-api-service
-      - products-api-service
-      - categories-api-service
-      - users-api-service
+     # - search-api-service
+     # - products-api-service
+     # - categories-api-service
+     # - users-api-service
       - products-comp-service
       
   hystrix-dash:
     build: hystrix-dash/
     ports: 
       - 8088:8088
-     depends_on:
+    depends_on:
       - eureka-server
       - products-comp-service

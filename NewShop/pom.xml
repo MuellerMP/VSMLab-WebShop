@@ -20,6 +20,9 @@
   	<module>products.api.service</module>
   	<module>categories.api.service</module>
   	<module>search.api.service</module>
+  	<module>eureka-server</module>
+  	<module>zuul-server</module>
+  	<module>hystrix-dash</module>
   </modules>
   
   <dependencies>
