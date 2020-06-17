@@ -17,8 +17,8 @@ public class ProductsCompController {
 	ProductCompClient client;
 	
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public ResponseEntity<?> search(@RequestParam("description") String description, @RequestParam("minPrice") String minPrice,
-			@RequestParam("maxPrice") String maxPrice) {
+	public ResponseEntity<?> search(@RequestParam(name="description") String description, @RequestParam(name="minPrice") String minPrice,
+			@RequestParam(name="maxPrice") String maxPrice) {
 		Product[] prod = client.getProducts(description, minPrice, maxPrice);
 		return new ResponseEntity<Product[]>(prod, HttpStatus.OK);
 	}

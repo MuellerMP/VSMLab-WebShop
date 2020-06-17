@@ -19,9 +19,14 @@ public class ProductCoreController {
 	private ProductRepo repo;
 	
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam("description") String description,
-			@RequestParam("minPrice") String minPrice, @RequestParam("maxPrice") String maxPrice) {
-		Iterable<Product> allPolls = repo.findAll();
+	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam(name="description", required=false) String description,
+			@RequestParam(name="minPrice", required=false) String minPrice, @RequestParam(name="maxPrice", required=false) String maxPrice) {
+		Iterable<Product> allPolls;
+		if(description == null && minPrice == null && maxPrice == null) {
+			allPolls = repo.findAll();
+		} else {
+			allPolls = repo.findByDetailsAndPriceLessThanAndPriceGreaterThan(description, maxPrice, minPrice);
+		}
 		return new ResponseEntity<Iterable<Product>>(allPolls, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/products", method = RequestMethod.POST)
