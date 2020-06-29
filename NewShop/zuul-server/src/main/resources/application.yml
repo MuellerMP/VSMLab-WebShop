@@ -8,12 +8,13 @@ eureka:
     healthCheckUrlPath: /health
 zuul:
   ignoredServices: '*'
+  sensitiveHeaders: Cookie,Set-Cookie
   routes:
     products-comp-service:
       path: /products-comp-service/**
-    products-service:
+    products-core-service:
       path: /products-service/**
-    users-service:
+    users-core-service:
       path: /users-service/**
-    categories-service:
+    categories-core-service:
       path: /categories-service/**

@@ -9,7 +9,7 @@ import javax.persistence.*;
  * This class contains details about products.
  */
 @Entity
-@Table(name = "product")
+@Table(name = "Product")
 public class Product implements java.io.Serializable {
 
 	/**

@@ -25,7 +25,9 @@ public class ProductCoreController {
 		if(description == null && minPrice == null && maxPrice == null) {
 			allPolls = repo.findAll();
 		} else {
-			allPolls = repo.findByDetailsAndPriceLessThanAndPriceGreaterThan(description, maxPrice, minPrice);
+			Double maxPriceDouble = maxPrice != null ? Double.parseDouble(maxPrice) : null;
+			Double minPriceDouble = minPrice != null ? Double.parseDouble(minPrice) : null;
+			allPolls = repo.findByDetailsAndPriceLessThanAndPriceGreaterThan(description, maxPriceDouble, minPriceDouble);
 		}
 		return new ResponseEntity<Iterable<Product>>(allPolls, HttpStatus.OK);
 	}

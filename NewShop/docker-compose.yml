@@ -63,3 +63,10 @@ services:
       - products-comp-service
     links:
       - eureka-server
+      
+  legacywebshop:
+    build:
+      context: ../../hska-vis-legacy/
+      dockerfile: ../../hska-vis-legacy/docker/Dockerfile
+    ports:
+      - "8888:8080"

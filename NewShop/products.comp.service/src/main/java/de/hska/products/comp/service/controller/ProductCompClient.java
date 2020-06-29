@@ -39,10 +39,17 @@ public class ProductCompClient {
 	@HystrixCommand(fallbackMethod = "getProductsCache", 
 			commandProperties = { @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Product[] getProducts(String description, String minPrice, String maxPrice) {
-		String uri = UriComponentsBuilder.fromHttpUrl(PRODUCTS_URI).queryParam("description", description)
-				.queryParam("minPrice", minPrice)
-				.queryParam("maxPrice", maxPrice)
-				.toUriString();
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(PRODUCTS_URI);
+		if(description != null) {
+			builder.queryParam("description", description);
+		}
+		if(minPrice != null) {
+			builder.queryParam("minPrice", minPrice);
+		}
+		if(maxPrice != null) {
+			builder.queryParam("maxPrice", maxPrice);
+		}
+		String uri = builder.toUriString();
 		ResponseEntity<Product[]> prod = restTemplate.getForEntity(uri, Product[].class);
 		for(Product p : prod.getBody()) {
 			ResponseEntity<Category> c = restTemplate.getForEntity(CATEGORIES_URI, Category.class, p.getCategoryId());
