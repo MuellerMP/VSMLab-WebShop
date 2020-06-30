@@ -48,13 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-	        .requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access", "/webjars/**")
+        http.requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access", "/webjars/**")
 	        .and()
 	        .httpBasic()
 	        .and()
         	.authorizeRequests()
-        	.antMatchers(HttpMethod.POST, "/oauth/token").permitAll()
         	.antMatchers(HttpMethod.POST, "/users").permitAll()
         	.antMatchers("/**")
         	.authenticated();

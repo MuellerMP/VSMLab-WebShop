@@ -34,7 +34,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient("webshop").secret("secret").redirectUris("http://localhost:8887/EShop-1.0.0")
-				.authorizedGrantTypes("client_credentials", "password");
+				.authorizedGrantTypes("authorization_code", "refresh_token", "password");
 	}
 	
 	@Bean
