@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: Roles Core Service
+  version: 1.0.0
+servers:
+  - url: http://roles-core-service/v1
+    description: roles core service
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /rules:
+    post:
+      security:
+        - basicAuth: []
+      summary: Creates a new role
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                type:
+                  type: string
+                level:
+                  type: integer
+              example: # Sample object
+                type: admin
+                level: 0
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+    get:
+      parameters:
+      - name: level
+        in: path
+        required: false
+        schema:
+          type: integer
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing role by level
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: # Request body contents
+                type: object
+                properties:
+                  type:
+                    type: string
+                  level:
+                    type: integer                
+                example: # Sample object
+                  type: Admin
+                  level: 0
+        '403':
+          description: Forbidden
+  /rules/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing role
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: # Request body contents
+                type: object
+                properties:
+                  type:
+                    type: string
+                  level:
+                    type: integer                
+                example: # Sample object
+                  type: Admin
+                  level: 0
+        '403':
+          description: Forbidden
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Updates information about an existing role           
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: # Request body contents
+                type: object
+                properties:
+                  type:
+                    type: string
+                  level:
+                    type: integer                
+                example: # Sample object
+                  type: Admin
+                  level: 0
+        '403':
+          description: Forbidden
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Deletes information about an existing role           
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: # Request body contents
+                type: object
+                properties:
+                  type:
+                    type: string
+                  level:
+                    type: integer                
+                example: # Sample object
+                  type: Admin
+                  level: 0
+        '403':
+          description: Forbidden

@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: Users Composite Service
+  version: 1.0.0
+servers:
+  - url: http://user-comp-service/v1
+    description: users comp service
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /users:
+    post:
+      security:
+        - basicAuth: []
+      summary: Register
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example: # Sample object
+                email: max.mustermann@example.com
+                password: 123456
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+    get:
+      parameters:
+      - name: name
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        required: true
+        schema:
+          type: string
+      security:
+        - basicAuth: []
+      summary: Login
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema: # Request body contents
+                type: object
+                properties:
+                  name:
+                    type: string
+                  role:
+                    type: string                
+                example: # Sample object
+                  name: Max Mustermann
+                  role: Admin
+        '403':
+          description: Forbidden

@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: Product Composite Service
+  version: 1.0.0
+servers:
+  - url: http://search-comp-service/v1
+    description: search comp service
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /products:
+    get:
+      parameters:
+      - name: description
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: minPrice
+        in: query
+        required: false
+        schema:
+          type: number
+      - name: maxPrice
+        in: query
+        required: false
+        schema:
+          type: number
+      security:
+        - basicAuth: []
+      summary: Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    price:
+                      type: number
+                    details:
+                      type: string
+                    category:
+                      type: object
+                      properties:
+                        id: 
+                          type: integer
+                        name: 
+                          type: string
+        '403':
+          description: Forbidden

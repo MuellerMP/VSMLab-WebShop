@@ -1,0 +1,173 @@
+openapi: 3.0.0
+info:
+  title: Categories Core Service
+  version: 1.0.0
+servers:
+  - url: http://categories-core-service/v1
+    description: categories core service
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /create:
+    post:
+      security:
+        - basicAuth: []
+      summary: Creates a new category
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                name:
+                  type: string
+              example: # Sample object
+                name: category
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+  /getAll:
+    get:
+      security:
+        - basicAuth: []
+      summary: Return all categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+        '403':
+          description: Forbidden
+  /getByName/{name}:
+    get:
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing category by name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+  /get/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing category
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+  /update/{id}:
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Updates information about an existing category
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+  /delete/{id}:
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Deletes information about an existing category           
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden

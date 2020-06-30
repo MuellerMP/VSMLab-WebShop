@@ -15,6 +15,6 @@ zuul:
     products-core-service:
       path: /products-service/**
     users-core-service:
-      path: /users-service/**
+      path: /**
     categories-core-service:
       path: /categories-service/**

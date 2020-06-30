@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: Categories API
+  version: 1.0.0
+servers:
+  - url: http://categories-api/v1
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /categories:
+    post:
+      security:
+        - basicAuth: []
+      summary: Creates a new category
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                name:
+                  type: string
+              example: # Sample object
+                name: category
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+    get:
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing category by name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+  /categories/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing category
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Updates information about an existing category
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Deletes information about an existing category           
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '403':
+          description: Forbidden

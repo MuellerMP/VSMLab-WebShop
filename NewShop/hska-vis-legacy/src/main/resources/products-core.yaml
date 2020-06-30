@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: Products Core Service
+  version: 1.0.0
+servers:
+  - url: http://products-core-service/v1
+    description: products core service
+components:
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+paths:
+  /products:
+    post:
+      security:
+        - basicAuth: []
+      summary: Creates a new product
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: number
+                details:
+                  type: string
+                category-id:
+                  type: integer
+              example: # Sample object
+                id: 0
+                name: product
+                price: 0.1
+                details: product details
+                category-id: 0
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+    get:
+      parameters:
+      - name: description
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: minPrice
+        in: query
+        required: false
+        schema:
+          type: number
+      - name: maxPrice
+        in: query
+        required: false
+        schema:
+          type: number
+      security:
+        - basicAuth: []
+      summary: Return all products by search params
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    price:
+                      type: number
+                    details:
+                      type: string
+                    category-id:
+                      type: integer
+        '403':
+          description: Forbidden
+  /products/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - basicAuth: []
+      summary: Receives information about an existing product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  price:
+                    type: number
+                  details:
+                    type: string
+                  category-id:
+                    type: integer
+        '403':
+          description: Forbidden
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Updates information about an existing product
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                price:
+                  type: number
+                details:
+                  type: string
+                category-id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  price:
+                    type: number
+                  details:
+                    type: string
+                  category-id:
+                    type: integer
+        '403':
+          description: Forbidden
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      security:
+        - BasicAuth: []
+      summary: Deletes information about an existing product    
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: # Request body contents
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  price:
+                    type: number
+                  details:
+                    type: string
+                  category-id:
+                    type: integer
+        '403':
+          description: Forbidden
