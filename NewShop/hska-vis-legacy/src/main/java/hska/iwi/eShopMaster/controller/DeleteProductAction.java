@@ -19,10 +19,8 @@ public class DeleteProductAction extends ActionSupport {
 	private static final long serialVersionUID = 3666796923937616729L;
 
 	private int id;
-	
 
-	@Autowired
-	private OAuth2RestTemplate oAuth2RestTemplate;
+	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private final String PRODUCT_URL = "http://localhost:8081/products-comp-service/products";
 

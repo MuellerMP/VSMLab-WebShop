@@ -34,8 +34,7 @@ public class SearchAction extends ActionSupport{
 	private List<Product> products;
 	private List<Category> categories;
 
-	@Autowired
-	private OAuth2RestTemplate oAuth2RestTemplate;
+	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private final String PRODUCTS_URL = "http://localhost:8081/products-comp-service/products";
 	private final String GET_CATEGORIES_URL = "http://localhost:8081/categories-service/categories";

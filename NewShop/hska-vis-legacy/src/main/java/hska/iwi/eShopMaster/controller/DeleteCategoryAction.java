@@ -25,8 +25,7 @@ public class DeleteCategoryAction extends ActionSupport {
 	private List<Category> categories;
 	
 
-	@Autowired
-	private OAuth2RestTemplate oAuth2RestTemplate;
+	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private final String CATEGORIES_URL = "http://localhost:8081/products-comp-service/categories";
 	private final String GET_CATEGORIES_URL = "http://localhost:8081/categories-service/categories";

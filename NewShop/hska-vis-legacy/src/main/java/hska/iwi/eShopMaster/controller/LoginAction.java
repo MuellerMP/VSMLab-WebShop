@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.stereotype.Service;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -24,8 +25,7 @@ public class LoginAction extends ActionSupport {
 	private String lastname;
 	private String role;
 	
-	@Autowired
-	private OAuth2RestTemplate oAuth2RestTemplate;
+	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private static final String USERS_URL = "http://localhost:8001/users";
 

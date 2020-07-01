@@ -5,9 +5,13 @@
      <filter-name>oauthFilter</filter-name>
      <filter-class>org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter</filter-class>
   </filter>
+  <filter-mapping>
+    <filter-name>oauthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>struts2</filter-name>
-    <filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    <filter-class>hska.iwi.eShopMaster.controller.StrutsCustomFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>struts2</filter-name>
@@ -20,7 +24,7 @@
     <description></description>
     <role-name>mytomcat</role-name>
   </security-role>
-  <listener>
+  <!-- <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+  </listener> -->
 </web-app>

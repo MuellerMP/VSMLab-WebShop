@@ -25,8 +25,7 @@ public class ListAllProductsAction extends ActionSupport {
 	User user;
 	private List<Product> products;
 	
-	@Autowired
-	private OAuth2RestTemplate oAuth2RestTemplate;
+	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private final String PRODUCTS_URL = "http://localhost:8081/products-comp-service/products";
 	
