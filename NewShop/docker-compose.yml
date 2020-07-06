@@ -69,4 +69,5 @@ services:
       context: hska-vis-legacy/
       dockerfile: ./docker/Dockerfile
     ports:
-      - "8887:8080"
+      - "8080:8080"
+      - "8000:8000"

@@ -26,19 +26,14 @@ public class UserCoreController {
 	@Autowired
 	private PasswordEncoder encoder;
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<Object> login() {
-		return new ResponseEntity<Object>(null, HttpStatus.OK);
-	}
-	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ResponseEntity<User> getUserByName(@RequestParam("username") String username, HttpServletRequest request) {
-		if(!request.isUserInRole("ADMIN")) {
-			throw new AccessDeniedException("403 returned");
-		}
 		List<User> userList = repo.findByUsername(username);
-		assert userList.size() == 1;
-		return new ResponseEntity<User>(userList.get(0), HttpStatus.OK);
+		if(userList.size() >= 1) {
+			return new ResponseEntity<User>(userList.get(0), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<User>(new User(), HttpStatus.NOT_FOUND);
+		}
 	}
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public ResponseEntity<?> addUser(@RequestBody User user) {

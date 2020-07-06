@@ -27,8 +27,8 @@ public class DeleteCategoryAction extends ActionSupport {
 
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private final String CATEGORIES_URL = "http://localhost:8081/products-comp-service/categories";
-	private final String GET_CATEGORIES_URL = "http://localhost:8081/categories-service/categories";
+	private final String CATEGORIES_URL = "http://zuul:8081/products-comp-service/categories";
+	private final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 		

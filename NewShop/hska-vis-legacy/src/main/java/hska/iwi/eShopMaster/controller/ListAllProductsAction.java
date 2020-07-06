@@ -27,7 +27,7 @@ public class ListAllProductsAction extends ActionSupport {
 	
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private final String PRODUCTS_URL = "http://localhost:8081/products-comp-service/products";
+	private final String PRODUCTS_URL = "http://zuul:8081/products-comp-service/products";
 	
 	public String execute() throws Exception{
 		String result = "input";

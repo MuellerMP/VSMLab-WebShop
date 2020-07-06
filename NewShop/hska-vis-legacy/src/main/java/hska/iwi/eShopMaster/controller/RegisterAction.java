@@ -28,7 +28,7 @@ public class RegisterAction extends ActionSupport {
     
 	private static RestTemplate restTemplate = generateRestTemplate();
 	
-	private static final String USERS_URL = "http://host.docker.internal:8081/users-service/users";
+	private static final String USERS_URL = "http://zuul:8081/users-service/users";
 	
 	private static RestTemplate generateRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();

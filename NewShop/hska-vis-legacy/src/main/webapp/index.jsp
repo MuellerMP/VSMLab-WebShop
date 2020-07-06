@@ -50,6 +50,10 @@
 							<label>Passwort <font color="red">*</font></label>
 							<s:password name="password" placeholder="Passwort" cssClass = "form-control" />
 						</div>
+						
+						<s:iterator value="#parameters" var="param">
+						    <s:hidden name="%{#param.key}" value="%{#param.value}" />                 
+						</s:iterator>
 							
 						<div class = "pull-right">
 							<s:submit method="execute" value="login" align="center" cssClass="btn btn-success"/>

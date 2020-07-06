@@ -28,8 +28,8 @@ public class AddProductAction extends ActionSupport {
 	@Autowired
 	private OAuth2RestTemplate oAuth2RestTemplate;
 	
-	private final String ADD_PRODUCT_URL = "http://localhost:8081/products-service/products";
-	private final String GET_CATEGORIES_URL = "http://localhost:8081/categories-service/categories";
+	private final String ADD_PRODUCT_URL = "http://zuul:8081/products-service/products";
+	private final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 		String result = "input";

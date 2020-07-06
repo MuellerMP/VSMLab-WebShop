@@ -30,8 +30,8 @@ public class ProductDetailsAction extends ActionSupport {
 
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private final String GET_PRODUCT_URL = "http://localhost:8081/products-service/products";
-	private final String GET_CATEGORY_URL = "http://localhost:8081/categories-service/products";
+	private final String GET_PRODUCT_URL = "http://zuul:8081/products-service/products";
+	private final String GET_CATEGORY_URL = "http://zuul:8081/categories-service/products";
 
 	public String execute() throws Exception {
 

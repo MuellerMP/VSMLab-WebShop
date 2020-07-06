@@ -28,7 +28,7 @@ public class InitCategorySiteAction extends ActionSupport {
 
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private static final String GET_CATEGORIES_URL = "http://localhost:8081/categories-service/categories";
+	private static final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 		

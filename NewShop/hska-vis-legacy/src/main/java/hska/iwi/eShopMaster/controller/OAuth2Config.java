@@ -1,16 +1,25 @@
 package hska.iwi.eShopMaster.controller;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.AccessTokenProvider;
+import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
 import org.springframework.security.oauth2.client.token.AccessTokenRequest;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
+import org.springframework.security.oauth2.client.token.OAuth2AccessTokenSupport;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 @EnableOAuth2Client
@@ -31,10 +40,11 @@ public class OAuth2Config {
         AuthorizationCodeResourceDetails resource;
         resource = new AuthorizationCodeResourceDetails();
         resource.setUserAuthorizationUri("http://localhost:8001/oauth/authorize");
-        resource.setAccessTokenUri("http://localhost:8001/oauth/token");
+        resource.setAccessTokenUri("http://zuul:8081/oauth/token");
         resource.setClientId("webshop");
         resource.setClientSecret("secret");
         resource.setScope(Arrays.asList("write", "read"));
+        resource.setPreEstablishedRedirectUri("http://localhost:8080/EShop");
         return resource;
     }
     
@@ -45,6 +55,7 @@ public class OAuth2Config {
     @Bean
     private static OAuth2RestTemplate oAuth2RestTemplate() {
         AccessTokenRequest atr = new DefaultAccessTokenRequest();
-        return new OAuth2RestTemplate(resource(), new DefaultOAuth2ClientContext(atr));
+        OAuth2RestTemplate client = new OAuth2RestTemplate(resource(), new DefaultOAuth2ClientContext(atr));
+        return client;
     }
 }

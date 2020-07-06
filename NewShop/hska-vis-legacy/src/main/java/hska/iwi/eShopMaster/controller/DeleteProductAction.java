@@ -22,7 +22,7 @@ public class DeleteProductAction extends ActionSupport {
 
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private final String PRODUCT_URL = "http://localhost:8081/products-comp-service/products";
+	private final String PRODUCT_URL = "http://zuul:8081/products-comp-service/products";
 
 	public String execute() throws Exception {
 		

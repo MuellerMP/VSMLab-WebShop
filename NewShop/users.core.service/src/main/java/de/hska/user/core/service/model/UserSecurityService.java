@@ -1,5 +1,6 @@
 package de.hska.user.core.service.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,11 @@ public class UserSecurityService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) 
 			throws UsernameNotFoundException {
 		User user = repo.findByUsername(username).get(0);
+		List<SimpleGrantedAuthority> list = new ArrayList<>();
+		list.add(new SimpleGrantedAuthority(user.getRoletype()));
 		return new org.springframework.security.core.userdetails
 				.User(user.getUsername(), user.getPassword(),
-	            List.of(new SimpleGrantedAuthority(user.getRoletype())));
+	            list);
 	}
 
 }

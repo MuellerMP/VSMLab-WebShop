@@ -24,10 +24,12 @@ public class LoginAction extends ActionSupport {
 	private String firstname;
 	private String lastname;
 	private String role;
+	private String code;
+	private String state;
 	
 	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
-	private static final String USERS_URL = "http://localhost:8001/users";
+	private static final String USERS_URL = "http://zuul:8081/users";
 
 	@Override
 	public String execute() throws Exception {
@@ -36,7 +38,12 @@ public class LoginAction extends ActionSupport {
 		String result = "input";
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
-		User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("/"+getUsername()), User.class).getBody();
+		if(state != null && code != null) {
+			oAuth2RestTemplate.getOAuth2ClientContext().getAccessTokenRequest().setAuthorizationCode(code);
+			oAuth2RestTemplate.getOAuth2ClientContext().getAccessTokenRequest().setStateKey(state);
+		}
+		//oAuth2RestTemplate.getAccessToken();
+		User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("?username="+getUsername()), User.class).getBody();
 		
 		// Does user exist?
 		if (user != null) {
@@ -103,5 +110,21 @@ public class LoginAction extends ActionSupport {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	public String getState() {
+		return state;
+	}
+	
+	public void setState(String state) {
+		this.state = state;
 	}
 }

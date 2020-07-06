@@ -24,6 +24,7 @@ public class ExceptionInterceptor extends ExceptionMappingInterceptor {
         try {
             result = invocation.invoke();
         } catch (Exception e) {
+        	e.printStackTrace();
     		Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);
     		UserRedirectRequiredException redirect = (UserRedirectRequiredException) throwableAnalyzer
     				.getFirstThrowableOfType(
