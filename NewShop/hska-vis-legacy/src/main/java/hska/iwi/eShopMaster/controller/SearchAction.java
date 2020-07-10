@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -34,14 +35,13 @@ public class SearchAction extends ActionSupport{
 	private List<Product> products;
 	private List<Category> categories;
 
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
-	
 	private final String PRODUCTS_URL = "http://zuul:8081/products-comp-service/products";
 	private final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 		
 		String result = "input";
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 		
 		// Get user:
 		Map<String, Object> session = ActionContext.getContext().getSession();
@@ -79,10 +79,28 @@ public class SearchAction extends ActionSupport{
 					searchQuery.append("maxPrice=").append(sMaxPrice);
 				}
 			}
-			this.products = Arrays.asList(oAuth2RestTemplate.getForEntity(searchQuery.toString(),Product[].class).getBody());
+			try {
+				System.out.println(searchQuery.toString());
+				Product[] arr = oAuth2RestTemplate.getForEntity(searchQuery.toString(),Product[].class).getBody();
+				if(arr != null) {
+					this.products = Arrays.asList(arr);
+				} else {
+					this.products = Collections.emptyList();
+				}
 			
-			// Show all categories:
-			this.categories = Arrays.asList(oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL.concat(searchQuery.toString()),Category[].class).getBody());
+				System.out.println(GET_CATEGORIES_URL);
+				// Show all categories:
+				Category[] arr2 = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL,Category[].class).getBody();
+				if(arr2 != null) {
+					this.categories = Arrays.asList(arr2);
+				} else {
+					this.categories = Collections.emptyList();
+				}
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
 			result = "success";
 		}
 		

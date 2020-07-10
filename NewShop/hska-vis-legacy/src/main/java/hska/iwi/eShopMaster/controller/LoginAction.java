@@ -26,8 +26,7 @@ public class LoginAction extends ActionSupport {
 	private String role;
 	private String code;
 	private String state;
-	
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
+	private String fakeUsername;
 	
 	private static final String USERS_URL = "http://zuul:8081/users";
 
@@ -36,6 +35,7 @@ public class LoginAction extends ActionSupport {
 
 		// Return string:
 		String result = "input";
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		if(state != null && code != null) {
@@ -43,7 +43,8 @@ public class LoginAction extends ActionSupport {
 			oAuth2RestTemplate.getOAuth2ClientContext().getAccessTokenRequest().setStateKey(state);
 		}
 		//oAuth2RestTemplate.getAccessToken();
-		User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("?username="+getUsername()), User.class).getBody();
+		String username = getUsername() == null ? getFakeUsername() : getUsername();
+		User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("?username="+username), User.class).getBody();
 		
 		// Does user exist?
 		if (user != null) {
@@ -55,15 +56,18 @@ public class LoginAction extends ActionSupport {
 			//	addActionError(getText("error.password.wrong"));
 			//}
 		}
-		else {
-			addActionError(getText("error.username.wrong"));
-		}
+		//else {
+		//	addActionError(getText("error.username.wrong"));
+		//}
 
 		return result;
 	}
 	
 	@Override
 	public void validate() {
+		if(getUsername() == null && getPassword() == null && getFakeUsername() != null) {
+			return;
+		}
 		if (getUsername().length() == 0) {
 			addActionError(getText("error.username.required"));
 		}
@@ -78,6 +82,14 @@ public class LoginAction extends ActionSupport {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getFakeUsername() {
+		return (this.fakeUsername);
+	}
+
+	public void setFakeUsername(String fakeUsername) {
+		this.fakeUsername = fakeUsername;
 	}
 
 	public String getPassword() {

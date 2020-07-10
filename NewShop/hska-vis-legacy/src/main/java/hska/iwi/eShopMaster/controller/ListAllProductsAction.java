@@ -8,6 +8,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.User;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -25,19 +26,23 @@ public class ListAllProductsAction extends ActionSupport {
 	User user;
 	private List<Product> products;
 	
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
-	
 	private final String PRODUCTS_URL = "http://zuul:8081/products-comp-service/products";
 	
 	public String execute() throws Exception{
 		String result = "input";
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 		
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		user = (User) session.get("webshop_user");
 		
 		if(user != null){
 			System.out.println("list all products!");
-			this.products = Arrays.asList(oAuth2RestTemplate.getForEntity(PRODUCTS_URL, Product[].class).getBody());
+			Product[] arr = oAuth2RestTemplate.getForEntity(PRODUCTS_URL,Product[].class).getBody();
+			if(arr != null) {
+				this.products = Arrays.asList(arr);
+			} else {
+				this.products = Collections.emptyList();
+			}
 			result = "success";
 		}
 		

@@ -7,6 +7,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.User;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -25,21 +26,25 @@ public class InitCategorySiteAction extends ActionSupport {
 	private User user;
 
 	private List<Category> categories;
-
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private static final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 		
 		String res = "input";
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		user = (User) session.get("webshop_user");
 		boolean isAdmin = true;
 		if(user != null && isAdmin) {
 
-			this.setCategories(Arrays.asList(oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL, Category[].class).getBody()));
+			Category[] arr = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL, Category[].class).getBody();
+			if(arr != null){
+				this.setCategories(Arrays.asList(arr));
+			} else {
+				this.setCategories(Collections.emptyList());
+			}
 			
 			if(pageToGoTo != null){
 				if(pageToGoTo.equals("c")){

@@ -26,8 +26,8 @@ import de.hska.products.comp.service.model.Product;
 
 @Component
 public class ProductCompClient {
-	private static String PRODUCTS_URI = "http://host.docker.internal:8002/products";
-	private static String CATEGORIES_URI = "http://host.docker.internal:8003/categories/{id}";
+	private static String PRODUCTS_URI = "http://products-core-service:8002/products";
+	private static String CATEGORIES_URI = "http://categories-core-service:8003/categories";
 	
 	private final Map<Long, Double> productPriceCache = new LinkedHashMap<Long, Double>();
 	private final Map<Long, String> productDescCache = new LinkedHashMap<Long, String>();
@@ -52,7 +52,7 @@ public class ProductCompClient {
 		String uri = builder.toUriString();
 		ResponseEntity<Product[]> prod = restTemplate.getForEntity(uri, Product[].class);
 		for(Product p : prod.getBody()) {
-			ResponseEntity<Category> c = restTemplate.getForEntity(CATEGORIES_URI, Category.class, p.getCategoryId());
+			ResponseEntity<Category> c = restTemplate.getForEntity(CATEGORIES_URI.concat("/"+p.getCategoryId()), Category.class);
 			p.setCategory(c.getBody());
 			productCache.putIfAbsent(p.getId(), p);
 			productDescCache.putIfAbsent(p.getId(), p.getDetails());
@@ -125,11 +125,13 @@ public class ProductCompClient {
 	}
 	
 	public void deleteCategory(Long id) {
-		ResponseEntity<Category> c = restTemplate.getForEntity(CATEGORIES_URI, Category.class, id);
-		for(String pid : c.getBody().getProductIds().split(",")) {
-			restTemplate.delete(PRODUCTS_URI.concat("/{id}"), pid);
+		ResponseEntity<Category> c = restTemplate.getForEntity(CATEGORIES_URI.concat("/"+id), Category.class);
+		if(c.getBody().getProductIds() != null && !c.getBody().getProductIds().isEmpty()) {
+			for(String pid : c.getBody().getProductIds().split(",")) {
+				restTemplate.delete(PRODUCTS_URI.concat("/"+pid));
+			}
 		}
-		restTemplate.delete(CATEGORIES_URI, id);
+		restTemplate.delete(CATEGORIES_URI.concat("/"+id));
 	}
 	
 	@Bean

@@ -52,6 +52,10 @@ public class OAuth2Config {
     	return template;
     }
 
+    public static OAuth2RestTemplate resetTemplate() {
+    	return template = oAuth2RestTemplate();
+    }
+
     @Bean
     private static OAuth2RestTemplate oAuth2RestTemplate() {
         AccessTokenRequest atr = new DefaultAccessTokenRequest();

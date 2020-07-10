@@ -7,6 +7,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.User;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -24,14 +25,12 @@ public class DeleteCategoryAction extends ActionSupport {
 	private int catId;
 	private List<Category> categories;
 	
-
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 	
 	private final String CATEGORIES_URL = "http://zuul:8081/products-comp-service/categories";
 	private final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
-		
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 		String res = "input";
 		
 		Map<String, Object> session = ActionContext.getContext().getSession();
@@ -40,11 +39,19 @@ public class DeleteCategoryAction extends ActionSupport {
 		if(user != null && (user.getRoletype().equalsIgnoreCase("admin"))) {
 
 			// Helper inserts new Category in DB:
-		
-			oAuth2RestTemplate.delete(CATEGORIES_URL.concat("/"+catId));
+			try {
+				oAuth2RestTemplate.delete(CATEGORIES_URL.concat("/"+catId));
 
-			categories = Arrays.asList(oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL, Category[].class).getBody());
-				
+				Category[] arr2 = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL,Category[].class).getBody();
+				if(arr2 != null) {
+					this.categories = Arrays.asList(arr2);
+				} else {
+					this.categories = Collections.emptyList();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+				throw e;
+			}				
 			res = "success";
 
 		}

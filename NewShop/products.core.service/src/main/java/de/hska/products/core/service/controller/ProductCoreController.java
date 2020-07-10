@@ -32,14 +32,14 @@ public class ProductCoreController {
 		return new ResponseEntity<Iterable<Product>>(allPolls, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/products", method = RequestMethod.POST)
-	public ResponseEntity<?> addProduct(@RequestBody Product product) {
+	public ResponseEntity<Product> addProduct(@RequestBody Product product) {
 		product = repo.save(product);
-		return new ResponseEntity<Object>(null, HttpStatus.CREATED);
+		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 	}
 	@RequestMapping(value = "/products/{productId}", method = RequestMethod.GET)
 	public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
-		Product user = repo.findById(productId).orElse(null);
-		return new ResponseEntity<Product>(user, HttpStatus.OK);
+		Product product = repo.findById(productId).orElse(null);
+		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/products/{productId}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product product) {

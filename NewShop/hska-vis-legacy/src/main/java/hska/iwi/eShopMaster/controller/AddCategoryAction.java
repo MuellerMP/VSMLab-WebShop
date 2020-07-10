@@ -7,6 +7,7 @@ import hska.iwi.eShopMaster.model.database.dataobjects.User;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -27,13 +28,12 @@ public class AddCategoryAction extends ActionSupport {
 	
 	User user;
 	
-	private OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
-	
 	private static final String GET_CATEGORIES_URL = "http://zuul:8081/categories-service/categories";
 
 	public String execute() throws Exception {
 
 		String res = "input";
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
 
 		Map<String, Object> session = ActionContext.getContext().getSession();
 		user = (User) session.get("webshop_user");
@@ -43,7 +43,12 @@ public class AddCategoryAction extends ActionSupport {
 			oAuth2RestTemplate.postForEntity(GET_CATEGORIES_URL, cat, Category.class);
 			
 			// Go and get new Category list
-			this.setCategories(Arrays.asList(oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL, Category[].class).getBody()));
+			Category[] arr = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL,Category[].class).getBody();
+			if(arr != null) {
+				this.setCategories(Arrays.asList(arr));
+			} else {
+				this.setCategories(Collections.emptyList());
+			}
 			
 			res = "success";
 		}
@@ -58,7 +63,13 @@ public class AddCategoryAction extends ActionSupport {
 			addActionError(getText("error.catname.required"));
 		}
 		// Go and get new Category list
-		this.setCategories(Arrays.asList(oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL, Category[].class).getBody()));
+		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
+		Category[] arr = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL,Category[].class).getBody();
+		if(arr != null) {
+			this.setCategories(Arrays.asList(arr));
+		} else {
+			this.setCategories(Collections.emptyList());
+		}
 	}
 
 	public List<Category> getCategories() {
