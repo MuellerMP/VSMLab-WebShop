@@ -37,6 +37,7 @@ public class DeleteProductAction extends ActionSupport {
 			try {
 				Product product = oAuth2RestTemplate.getForEntity(PRODUCT_URL.concat("/"+id),Product.class).getBody();
 				Category cat = oAuth2RestTemplate.getForEntity(GET_CATEGORIES_URL.concat("/"+product.getCategoryId()),Category.class).getBody();
+				oAuth2RestTemplate.put(GET_CATEGORIES_URL.concat("/"+categoryId), cat);
 				if(cat.getProductIds().contains(","+product.getCategoryId())) {
 					cat.setProductIds(cat.getProductIds().replaceAll(","+product.getCategoryId(), ""));
 				} else {
