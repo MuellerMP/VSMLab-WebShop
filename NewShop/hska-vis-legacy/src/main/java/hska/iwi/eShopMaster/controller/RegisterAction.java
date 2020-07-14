@@ -28,7 +28,7 @@ public class RegisterAction extends ActionSupport {
     
 	private static RestTemplate restTemplate = generateRestTemplate();
 	
-	private static final String USERS_URL = "http://zuul:8081/users-service/users";
+	private static final String USERS_URL = "http://zuul:8081/users";
 	
 	private static RestTemplate generateRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -50,13 +50,19 @@ public class RegisterAction extends ActionSupport {
     		    	
 	        // save it to database
         User user = new User(username, firstname, lastname, password1, "user", 1);
-        restTemplate.postForEntity(USERS_URL, user, User.class).getBody();
-	            // User has been saved successfully to databse:
-	        	addActionMessage("user registered, please login");
-	        	addActionError("user registered, please login");
-				Map<String, Object> session = ActionContext.getContext().getSession();
-				session.put("message", "user registered, please login");
-	            result = "success";
+		try {
+			
+			restTemplate.postForEntity(USERS_URL, user, User.class).getBody();
+					// User has been saved successfully to databse:
+					addActionMessage("user registered, please login");
+					addActionError("user registered, please login");
+					Map<String, Object> session = ActionContext.getContext().getSession();
+					session.put("message", "user registered, please login");
+					result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	        
     	//}
     	//else {

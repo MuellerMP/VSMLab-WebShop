@@ -44,7 +44,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 			.authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
 			.scopes("read", "write", "trust")
 			.resourceIds("oauth2-resource")
-			.accessTokenValiditySeconds(600)
+			.accessTokenValiditySeconds(60000)
 			.redirectUris("http://localhost:8080/EShop");
 	}
 	
