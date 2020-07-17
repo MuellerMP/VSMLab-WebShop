@@ -40,12 +40,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
 			.withClient("webshop").secret(encoder.encode("secret"))
-			.authorizedGrantTypes("authorization_code", "refresh_token", "password")
-			.authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
-			.scopes("read", "write", "trust")
-			.resourceIds("oauth2-resource")
-			.accessTokenValiditySeconds(60000)
-			.redirectUris("http://localhost:8080/EShop");
+			.authorizedGrantTypes("authorization_code", "password", "client_credentials", "refresh_token")
+			.scopes("read", "write", "trust");
 	}
 	
 	@Bean

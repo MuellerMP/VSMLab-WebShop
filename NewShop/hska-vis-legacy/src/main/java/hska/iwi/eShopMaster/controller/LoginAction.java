@@ -35,26 +35,25 @@ public class LoginAction extends ActionSupport {
 
 		// Return string:
 		String result = "input";
-		OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.getTemplate();
+		try {	
+			OAuth2RestTemplate oAuth2RestTemplate = OAuth2Config.resetTemplate(getUsername(), getPassword());
 
-		Map<String, Object> session = ActionContext.getContext().getSession();
-		if(state != null && code != null) {
-			oAuth2RestTemplate.getOAuth2ClientContext().getAccessTokenRequest().setAuthorizationCode(code);
-			oAuth2RestTemplate.getOAuth2ClientContext().getAccessTokenRequest().setStateKey(state);
-		}
-		//oAuth2RestTemplate.getAccessToken();
-		String username = getUsername() == null ? getFakeUsername() : getUsername();
-		User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("?username="+username), User.class).getBody();
-		
-		// Does user exist?
-		if (user != null) {
-			// Is the password correct?
-			session.put("webshop_user", user);
-			session.put("message", "");
-			result = "success";
-			//else {
-			//	addActionError(getText("error.password.wrong"));
-			//}
+			Map<String, Object> session = ActionContext.getContext().getSession();
+			User user = oAuth2RestTemplate.getForEntity(USERS_URL.concat("?username="+getUsername()), User.class).getBody();
+			
+			// Does user exist?
+			if (user != null) {
+				// Is the password correct?
+				session.put("webshop_user", user);
+				session.put("message", "");
+				result = "success";
+				//else {
+				//	addActionError(getText("error.password.wrong"));
+				//}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 		//else {
 		//	addActionError(getText("error.username.wrong"));
@@ -65,9 +64,6 @@ public class LoginAction extends ActionSupport {
 	
 	@Override
 	public void validate() {
-		if(getUsername() == null && getPassword() == null && getFakeUsername() != null) {
-			return;
-		}
 		if (getUsername().length() == 0) {
 			addActionError(getText("error.username.required"));
 		}

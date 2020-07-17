@@ -40,32 +40,20 @@
 				<div class="col-xs-4">
 					<h2>Login</h2>
 					<s:form action="LoginAction" focusElement="username" theme="simple"> 
-							
-						<s:if test="%{#parameters.get('code') != null}">
-							<div class = "form-group">
-								<label>Username<font color="red">*</font>:</label>
-								<s:textfield name="username" placeholder="Username" required ="true" cssClass ="form-control"/>
-							</div>
-							
-							<div class = "form-group">
-								<label>Passwort <font color="red">*</font></label>
-								<s:password name="password" placeholder="Passwort" cssClass = "form-control" />
-							</div>
-							
-							<s:iterator value="#parameters" var="param">
-								<s:hidden name="%{#param.key}" value="%{#param.value}" />                 
-							</s:iterator>
+						
+						<div class = "form-group">
+							<label>Username<font color="red">*</font>:</label>
+							<s:textfield name="username" placeholder="Username" required ="true" cssClass ="form-control"/>
+						</div>
+						
+						<div class = "form-group">
+							<label>Passwort <font color="red">*</font></label>
+							<s:password name="password" placeholder="Passwort" cssClass = "form-control" />
+						</div>
 								
-							<div class = "pull-right">
-								<s:submit method="execute" value="login" align="center" cssClass="btn btn-success"/>
-							</div>
-						</s:if>
-						<s:else>
-							<s:hidden name="fakeUsername" value="test" />
-							<div class = "pull-right">
-								<s:submit method="execute" value="Authorize App" align="center" cssClass="btn btn-success"/>
-							</div>
-						</s:else>
+						<div class = "pull-right">
+							<s:submit method="execute" value="login" align="center" cssClass="btn btn-success"/>
+						</div>
 							
 						<div>
 							<p><a href="./pages/register.jsp">Noch nicht registriert?</a> </p>

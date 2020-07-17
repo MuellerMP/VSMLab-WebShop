@@ -1,5 +1,8 @@
 package de.hska.products.core.service.controller;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import de.hska.products.core.service.model.Product;
 import de.hska.products.core.service.model.ProductRepo;
@@ -19,7 +25,7 @@ public class ProductCoreController {
 	private ProductRepo repo;
 	
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam(name="description", required=false) String description,
+	public ResponseEntity<Iterable<Product>> getProducts(@RequestParam(name="searchDescription", required=false) String description,
 			@RequestParam(name="minPrice", required=false) String minPrice, @RequestParam(name="maxPrice", required=false) String maxPrice) {
 		Iterable<Product> allPolls;
 		if(description == null && minPrice == null && maxPrice == null) {
@@ -31,16 +37,24 @@ public class ProductCoreController {
 		}
 		return new ResponseEntity<Iterable<Product>>(allPolls, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/products", method = RequestMethod.POST)
-	public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+	public ResponseEntity<Product> addProduct(@RequestBody Product product, Authentication auth) {
+		Collection<?extends GrantedAuthority> granted = auth.getAuthorities();
+		System.out.println("Authorities:");
+		System.out.println(Arrays.toString(granted.toArray()));
 		product = repo.save(product);
 		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 	}
+	
 	@RequestMapping(value = "/products/{productId}", method = RequestMethod.GET)
 	public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
 		Product product = repo.findById(productId).orElse(null);
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/products/{productId}", method = RequestMethod.PUT)
 	public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product product) {
 		Product plocal = repo.findById(productId).orElse(null);
@@ -49,6 +63,8 @@ public class ProductCoreController {
 		}
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/products/{productId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteProduct(@PathVariable Long productId) {
 		repo.deleteById(productId);

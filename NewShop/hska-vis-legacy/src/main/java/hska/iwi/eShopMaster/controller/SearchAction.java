@@ -59,11 +59,11 @@ public class SearchAction extends ActionSupport{
 			}
 			StringBuilder searchQuery = new StringBuilder();
 			searchQuery.append(PRODUCTS_URL);
-			if(searchDescription != null && sMinPrice != null && sMaxPrice != null) {
+			if((searchDescription != null && !searchDescription.isEmpty()) || sMinPrice != null || sMaxPrice != null) {
 				boolean notFirst = false;
 				searchQuery.append("?");
-				if(searchDescription != null) {
-					searchQuery.append("searchDescrption=").append(searchDescription);
+				if(searchDescription != null && !searchDescription.isEmpty()) {
+					searchQuery.append("searchDescription=").append(searchDescription);
 					notFirst = true;
 				}
 				if(sMinPrice != null) {
@@ -71,6 +71,7 @@ public class SearchAction extends ActionSupport{
 						searchQuery.append("&");
 					}
 					searchQuery.append("minPrice=").append(sMinPrice);
+					notFirst = true;
 				}
 				if(sMaxPrice != null) {
 					if(notFirst) {

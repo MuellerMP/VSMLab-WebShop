@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import de.hska.categories.core.service.model.Category;
 import de.hska.categories.core.service.model.CategoryRepo;
@@ -30,6 +31,7 @@ public class CategoryCoreService {
 		}
 		return new ResponseEntity<Iterable<Category>>(allPolls, HttpStatus.OK);
 	}
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/categories", method = RequestMethod.POST)
 	public ResponseEntity<?> addcategory(@RequestBody Category category) {
 		category = repo.save(category);
@@ -40,6 +42,7 @@ public class CategoryCoreService {
 		Category user = repo.findById(categoryId).orElse(null);
 		return new ResponseEntity<Category>(user, HttpStatus.OK);
 	}
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.PUT)
 	public ResponseEntity<Category> updatecategory(@PathVariable Long categoryId, @RequestBody Category category) {
 		Category plocal = repo.findById(categoryId).orElse(null);
@@ -48,6 +51,7 @@ public class CategoryCoreService {
 		}
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/categories/{categoryId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deletecategory(@PathVariable Long categoryId) {
 		repo.deleteById(categoryId);

@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.client.token.AccessTokenRequest;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
 import org.springframework.security.oauth2.client.token.OAuth2AccessTokenSupport;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeAccessTokenProvider;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
@@ -33,18 +33,18 @@ public class OAuth2Config {
     @Value("${oauth.token:http://localhost:8001/oauth/token}")
     private String tokenUrl;
     
-    private static OAuth2RestTemplate template = oAuth2RestTemplate();
+    private static OAuth2RestTemplate template = null;
 
-    @Bean
-    protected static OAuth2ProtectedResourceDetails resource() {
-        AuthorizationCodeResourceDetails resource;
-        resource = new AuthorizationCodeResourceDetails();
-        resource.setUserAuthorizationUri("http://localhost:8001/oauth/authorize");
+    protected static OAuth2ProtectedResourceDetails resource(String username, String password) {
+        ResourceOwnerPasswordResourceDetails resource;
+        resource = new  ResourceOwnerPasswordResourceDetails();
         resource.setAccessTokenUri("http://zuul:8081/oauth/token");
         resource.setClientId("webshop");
         resource.setClientSecret("secret");
         resource.setScope(Arrays.asList("write", "read"));
-        resource.setPreEstablishedRedirectUri("http://localhost:8080/EShop");
+		resource.setGrantType("password");
+		resource.setUsername(username);
+	    resource.setPassword(password);
         return resource;
     }
     
@@ -52,14 +52,13 @@ public class OAuth2Config {
     	return template;
     }
 
-    public static OAuth2RestTemplate resetTemplate() {
-    	return template = oAuth2RestTemplate();
+    public static OAuth2RestTemplate resetTemplate(String username, String password) {
+    	return template = oAuth2RestTemplate(username, password);
     }
 
-    @Bean
-    private static OAuth2RestTemplate oAuth2RestTemplate() {
+    private static OAuth2RestTemplate oAuth2RestTemplate(String username, String password) {
         AccessTokenRequest atr = new DefaultAccessTokenRequest();
-        OAuth2RestTemplate client = new OAuth2RestTemplate(resource(), new DefaultOAuth2ClientContext(atr));
+        OAuth2RestTemplate client = new OAuth2RestTemplate(resource(username, password), new DefaultOAuth2ClientContext(atr));
         return client;
     }
 }

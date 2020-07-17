@@ -1,5 +1,6 @@
 package de.hska.products.comp.service.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -17,6 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpHeaders;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -36,12 +44,14 @@ public class ProductCompClient {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	private String accessToken = null;
+	
 	@HystrixCommand(fallbackMethod = "getProductsCache", 
 			commandProperties = { @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Product[] getProducts(String description, String minPrice, String maxPrice) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(PRODUCTS_URI);
 		if(description != null) {
-			builder.queryParam("description", description);
+			builder.queryParam("searchDescription", description);
 		}
 		if(minPrice != null) {
 			builder.queryParam("minPrice", minPrice);
@@ -58,7 +68,12 @@ public class ProductCompClient {
 			productDescCache.putIfAbsent(p.getId(), p.getDetails());
 			productPriceCache.putIfAbsent(p.getId(), p.getPrice());
 		}
+		accessToken = null;
 		return prod.getBody();
+	}
+	
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 	
 	public Product[] getProductsCache(String description, String minPrice, String maxPrice) {
@@ -132,11 +147,34 @@ public class ProductCompClient {
 			}
 		}
 		restTemplate.delete(CATEGORIES_URI.concat("/"+id));
+		accessToken = null;
 	}
 	
 	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-	   // Do any additional configuration here
-	   return builder.build();
+	public RestTemplate restTemplate() {
+	   RestTemplate restTemplate = new RestTemplate();
+	   restTemplate.getInterceptors().add(new OAuthInterceptor());
+	   return restTemplate;
+	}
+	class OAuthInterceptor implements ClientHttpRequestInterceptor
+	{
+
+		@Override
+		public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException
+		{
+			if (accessToken == null)
+			{
+				//throw new IOException("Token not set");
+				System.out.println("##################### Token not set! ###################");
+			}
+			else
+			{
+				System.out.println("##################### Token found: " + accessToken);
+				HttpHeaders headers = request.getHeaders();
+				headers.add(HttpHeaders.AUTHORIZATION, "bearer " + accessToken);
+			}
+
+			return execution.execute(request, body);
+		}
 	}
 }

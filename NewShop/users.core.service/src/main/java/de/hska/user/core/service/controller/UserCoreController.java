@@ -1,12 +1,16 @@
 package de.hska.user.core.service.controller;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import de.hska.user.core.service.model.User;
 import de.hska.user.core.service.model.UserRepo;
@@ -46,6 +51,7 @@ public class UserCoreController {
 		User user = repo.findById(userId).orElse(null);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
 	public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User user) {
 		User userlocal = repo.findById(userId).orElse(null);
@@ -55,8 +61,12 @@ public class UserCoreController {
 		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+	public ResponseEntity<Object> deleteUser(@PathVariable Long userId, Authentication auth) {
+		Collection<?extends GrantedAuthority> granted = auth.getAuthorities();
+		System.out.println("Authorities:");
+		System.out.println(Arrays.toString(granted.toArray()));
 		repo.deleteById(userId);
 		return new ResponseEntity<Object>(null, HttpStatus.OK);
 	}

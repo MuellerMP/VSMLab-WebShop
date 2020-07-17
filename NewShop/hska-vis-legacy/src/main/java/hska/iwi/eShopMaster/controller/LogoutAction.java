@@ -14,7 +14,6 @@ public class LogoutAction extends ActionSupport {
 
 		// Clear session:
 		ActionContext.getContext().getSession().clear();
-		OAuth2Config.resetTemplate();
 		
 		return "success";
 		
